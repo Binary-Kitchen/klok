@@ -102,3 +102,11 @@ void display_scroll_left(unsigned char fillup)
 	display[0] = fillup;
 	*display = fillup;
 }
+
+void display_set_character(unsigned char pos, unsigned char mask)
+{
+	if (pos >= SEGMENTS)
+		return;
+
+	display[pos] = mask;
+}

@@ -14,3 +14,4 @@ void display_scroll_left(unsigned char fill);
 void display_num(unsigned char pos, unsigned char num);
 void display_panic(void);
 void display_dot(unsigned char pos, bool set);
+void display_set_character(unsigned char pos, unsigned char mask);
