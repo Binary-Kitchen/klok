@@ -27,4 +27,5 @@ void display_panic(void);
 void display_dot(unsigned char pos, bool set);
 void display_set_character(unsigned char pos, unsigned char mask);
 unsigned char display_get_character(unsigned char pos);
+void display_or_character(unsigned char pos, unsigned char mask);
 void display_clear(void);

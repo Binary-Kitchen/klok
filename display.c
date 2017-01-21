@@ -133,3 +133,10 @@ void display_get_char(unsigned char pos)
 		return display[pos];
 	return 0;
 }
+
+void display_or_character(unsigned char pos, unsigned char mask)
+{
+	if (pos >= SEGMENTS)
+		return;
+	display[pos] |= mask;
+}
