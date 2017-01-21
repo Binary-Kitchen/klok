@@ -7,6 +7,8 @@
  * the COPYING file in the top-level directory.
  */
 
+#include <string.h>
+
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
@@ -106,4 +108,9 @@ void display_set_character(unsigned char pos, unsigned char mask)
 		return;
 
 	display[pos] = mask;
+}
+
+void display_clear(void)
+{
+	memset(display, 0, SEGMENTS);
 }
