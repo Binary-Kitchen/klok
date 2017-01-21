@@ -36,10 +36,22 @@ static const unsigned char numbers[] = {
 	111,
 };
 
+static inline void nops(void) {
+	unsigned int i;
+	for (i = 0; i < 10; i++)
+		asm volatile("nop");
+}
+
 ISR(TIMER0_OVF_vect)
 {
 	static unsigned char segment = 0;
+	unsigned char i;
 
+	SEGMENT_DATA_PORT = 0;
+	SEGMENT_SELECT_PORT = 0;
+	_MemoryBarrier();
+	for (i = 0; i < 5; i++)
+		__asm__ __volatile__("nop\n");
 	SEGMENT_SELECT_PORT = (1<<segment);
 	_MemoryBarrier();
 	SEGMENT_DATA_PORT = display[segment];
