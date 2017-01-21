@@ -12,7 +12,6 @@
 
 #include "display.h"
 
-#define SEGMENTS 6
 #define SEGMENT_SELECT_PORT PORTB
 #define SEGMENT_SELECT_DDR  DDRB
 #define SEGMENT_DATA_PORT   PORTA

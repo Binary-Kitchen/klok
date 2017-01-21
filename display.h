@@ -9,6 +9,8 @@
 
 #include <stdbool.h>
 
+#define SEGMENTS 6
+
 #define MID	     (1<<0)
 #define TOP_LEFT     (1<<1)
 #define TOP	     (1<<2)
