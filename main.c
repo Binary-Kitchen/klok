@@ -72,6 +72,7 @@ static void panic(void)
 
 int main(void){
 	int ret;
+	unsigned int ctr;
 
 	MCUCSR |= (1<<JTD);
 	MCUCSR |= (1<<JTD);
@@ -91,14 +92,16 @@ int main(void){
 #endif
 
 	for (;;) {
-		ret = print_time();
-		if (ret)
-			display_panic();
-		_delay_ms(2000);
+		for (ctr = 0; ctr < 50; ctr++) {
+			ret = print_time();
+			if (ret)
+				display_panic();
+			_delay_ms(100);
+		}
 
 		ret = print_date();
 		if (ret)
 			display_panic();
-		_delay_ms(2000);
+		_delay_ms(5000);
 	}
 }
