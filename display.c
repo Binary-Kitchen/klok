@@ -18,8 +18,6 @@
 #define SEGMENT_DATA_PORT   PORTA
 #define SEGMENT_DATA_DDR    DDRA
 
-#define DOT (1<<4)
-
 #define _MemoryBarrier() __asm__ __volatile__("":::"memory")
 
 static unsigned char display[SEGMENTS];

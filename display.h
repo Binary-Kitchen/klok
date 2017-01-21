@@ -9,6 +9,15 @@
 
 #include <stdbool.h>
 
+#define MID	     (1<<0)
+#define TOP_LEFT     (1<<1)
+#define TOP	     (1<<2)
+#define TOP_RIGHT    (1<<3)
+#define DOT	     (1<<4)
+#define BOTTOM_RIGHT (1<<5)
+#define BOTTOM	     (1<<6)
+#define BOTTOM_LEFT  (1<<7)
+
 void display_init(void);
 void display_scroll_left(unsigned char fill);
 void display_num(unsigned char pos, unsigned char num);
