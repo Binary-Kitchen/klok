@@ -102,6 +102,10 @@ static const unsigned char ascii[128] PROGMEM = {
 		MID | BOTTOM_RIGHT | BOTTOM_LEFT | TOP_LEFT | TOP_RIGHT, /* x */
 		MID | BOTTOM_RIGHT | TOP_LEFT | TOP_RIGHT, /* y */
 		205, /* 2 */
+
+	['.'] = DOT,
+	[','] = DOT,
+	['!'] = TOP_RIGHT | BOTTOM_RIGHT | DOT,
 };
 
 static inline void nops(void) {
