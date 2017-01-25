@@ -1,15 +1,34 @@
+#include <avr/pgmspace.h>
 #include <util/delay.h>
 
 #include "animation.h"
 #include "display.h"
 
+static const char hello_P[] PROGMEM = "Hello, world! This is KLOK.";
+
 static void print_scroll(const char *str, unsigned int delay)
 {
 	unsigned char next;
+	unsigned int i;
 	while (*str) {
 		next = display_get_alphanum(*str);
 		display_scroll_left(next);
-		while (delay--)
+		for (i = 0; i < delay; i++)
+			/* we need compile time constants... */
+			_delay_ms(1);
+		str++;
+	}
+}
+
+static void print_scroll_P(const char *str, unsigned int delay)
+{
+	unsigned char next;
+	unsigned int i;
+
+	while (pgm_read_byte(str)) {
+		next = display_get_alphanum(pgm_read_byte(str));
+		display_scroll_left(next);
+		for (i = 0; i < delay; i++)
 			/* we need compile time constants... */
 			_delay_ms(1);
 		str++;
@@ -46,8 +65,14 @@ static void circle(unsigned char pos, unsigned char width, unsigned int delay)
 
 void animation(void)
 {
+	static bool init = false;
 	unsigned int i;
 	unsigned int delay;
+
+	if (!init) {
+		print_scroll_P(hello_P, 200);
+		init = true;
+	}
 
 	delay = 25;
 	circle(0, 5, delay);
