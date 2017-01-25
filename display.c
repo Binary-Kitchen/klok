@@ -127,7 +127,7 @@ void display_clear(void)
 	memset(display, 0, SEGMENTS);
 }
 
-void display_get_char(unsigned char pos)
+unsigned char display_get_character(unsigned char pos)
 {
 	if (pos < SEGMENTS)
 		return display[pos];
