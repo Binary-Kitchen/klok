@@ -11,6 +11,7 @@
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <avr/pgmspace.h>
 
 #include "display.h"
 
@@ -34,6 +35,15 @@ static const unsigned char numbers[] = {
 	44,
 	239,
 	111,
+};
+
+static const unsigned char panic[SEGMENTS] PROGMEM = {
+	0,
+	BOTTOM_LEFT | TOP_LEFT | TOP | BOTTOM,
+	BOTTOM_LEFT | TOP_LEFT,
+	BOTTOM_LEFT | TOP_LEFT | TOP | TOP_RIGHT | BOTTOM_RIGHT,
+	BOTTOM_LEFT | TOP_LEFT | TOP | TOP_RIGHT | BOTTOM_RIGHT | MID,
+	BOTTOM_LEFT | TOP_LEFT | TOP | TOP_RIGHT | MID,
 };
 
 static inline void nops(void) {
@@ -76,10 +86,7 @@ void display_init(void)
 
 void display_panic(void)
 {
-	display[5] = numbers[0];
-	display[4] = 0xe;
-	display[3] = 0xa;
-	display[2] = 0xd;
+	memcpy_P(display, panic, sizeof(panic));
 }
 
 void display_num(unsigned char pos, unsigned char num)
