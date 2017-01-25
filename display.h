@@ -20,6 +20,9 @@
 #define BOTTOM	     (1<<6)
 #define BOTTOM_LEFT  (1<<7)
 
+#define ALL (BOTTOM | TOP | MID |\
+	     BOTTOM_LEFT | BOTTOM_RIGHT | TOP_LEFT | TOP_RIGHT)
+
 void display_init(void);
 void display_scroll_left(unsigned char fill);
 void display_num(unsigned char pos, unsigned char num);
@@ -29,3 +32,4 @@ void display_set_character(unsigned char pos, unsigned char mask);
 unsigned char display_get_character(unsigned char pos);
 void display_or_character(unsigned char pos, unsigned char mask);
 void display_clear(void);
+void display_alphanum(unsigned char pos, char c, bool dot);

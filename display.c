@@ -7,6 +7,7 @@
  * the COPYING file in the top-level directory.
  */
 
+#include <ctype.h>
 #include <string.h>
 
 #include <avr/io.h>
@@ -44,6 +45,35 @@ static const unsigned char panic[SEGMENTS] PROGMEM = {
 	BOTTOM_LEFT | TOP_LEFT | TOP | TOP_RIGHT | BOTTOM_RIGHT,
 	BOTTOM_LEFT | TOP_LEFT | TOP | TOP_RIGHT | BOTTOM_RIGHT | MID,
 	BOTTOM_LEFT | TOP_LEFT | TOP | TOP_RIGHT | MID,
+};
+
+static const unsigned char alphabet[26] PROGMEM = {
+	BOTTOM_LEFT | TOP_LEFT | TOP | TOP_RIGHT | BOTTOM_RIGHT | MID, /* a */
+	ALL, /* b */
+	BOTTOM | BOTTOM_LEFT | TOP_LEFT | TOP, /* c */
+	238, /* d */
+	BOTTOM | MID | TOP | BOTTOM_LEFT | TOP_LEFT, /* e */
+	MID | TOP | BOTTOM_LEFT | TOP_LEFT, /* f */
+	BOTTOM | MID | BOTTOM_RIGHT | BOTTOM_LEFT | TOP_LEFT, /* g */
+	MID | BOTTOM_RIGHT | BOTTOM_LEFT | TOP_LEFT | TOP_RIGHT, /* h */
+	BOTTOM_LEFT | TOP_LEFT, /* i */
+	BOTTOM_RIGHT | TOP_RIGHT, /* j */
+	TOP_LEFT | MID | BOTTOM_RIGHT, /* k */
+	TOP_LEFT | BOTTOM_LEFT | BOTTOM, /* l */
+	BOTTOM_LEFT | TOP_LEFT | TOP | TOP_RIGHT | BOTTOM_RIGHT, /* m */
+	BOTTOM_LEFT | TOP_LEFT | TOP | TOP_RIGHT | BOTTOM_RIGHT, /* n */
+	238, /* o */
+	BOTTOM_LEFT | TOP_LEFT | TOP | TOP_RIGHT | MID, /* p */
+	BOTTOM_RIGHT | TOP_LEFT | TOP | TOP_RIGHT | BOTTOM_RIGHT | MID, /* q */
+	BOTTOM_LEFT | BOTTOM_RIGHT | TOP_LEFT | TOP | TOP_RIGHT | BOTTOM_RIGHT | MID, /* r */
+	TOP | TOP_LEFT | MID | BOTTOM_RIGHT | BOTTOM, /* s */
+	BOTTOM_LEFT | TOP_LEFT | TOP, /* t */
+	BOTTOM_LEFT | TOP_LEFT | BOTTOM | BOTTOM_RIGHT | TOP_RIGHT, /* u */
+	BOTTOM_LEFT | TOP_LEFT | BOTTOM | BOTTOM_RIGHT | TOP_RIGHT, /* v */
+	BOTTOM_LEFT | TOP_LEFT | BOTTOM | BOTTOM_RIGHT | TOP_RIGHT, /* v */
+	MID | BOTTOM_RIGHT | BOTTOM_LEFT | TOP_LEFT | TOP_RIGHT, /* x */
+	MID | BOTTOM_RIGHT | TOP_LEFT | TOP_RIGHT, /* y */
+	205, /* 2 */
 };
 
 static inline void nops(void) {
@@ -146,4 +176,20 @@ void display_or_character(unsigned char pos, unsigned char mask)
 	if (pos >= SEGMENTS)
 		return;
 	display[pos] |= mask;
+}
+
+void display_alphanum(unsigned char pos, char c, bool dot) {
+	if (pos >= SEGMENTS)
+		return;
+
+	if (isdigit(c))
+		c = pgm_read_byte(&numbers[c - '0']);
+	else if (isalpha(c))
+		c = pgm_read_byte(&alphabet[tolower(c) - 'a']);
+	else
+		c = 0;
+
+	c = dot ? c | DOT : c;
+
+	display[pos] = c;
 }
