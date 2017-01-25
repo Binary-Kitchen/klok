@@ -178,18 +178,18 @@ void display_or_character(unsigned char pos, unsigned char mask)
 	display[pos] |= mask;
 }
 
+unsigned char display_get_alphanum(char c)
+{	if (isdigit(c))
+		return pgm_read_byte(&numbers[c - '0']);
+	else if (isalpha(c))
+		return pgm_read_byte(&alphabet[tolower(c) - 'a']);
+
+	return 0;
+}
+
 void display_alphanum(unsigned char pos, char c, bool dot) {
 	if (pos >= SEGMENTS)
 		return;
 
-	if (isdigit(c))
-		c = pgm_read_byte(&numbers[c - '0']);
-	else if (isalpha(c))
-		c = pgm_read_byte(&alphabet[tolower(c) - 'a']);
-	else
-		c = 0;
-
-	c = dot ? c | DOT : c;
-
-	display[pos] = c;
+	display[pos] = display_get_alphanum(c) | (dot ? DOT : 0);
 }

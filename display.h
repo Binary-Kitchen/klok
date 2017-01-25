@@ -33,3 +33,4 @@ unsigned char display_get_character(unsigned char pos);
 void display_or_character(unsigned char pos, unsigned char mask);
 void display_clear(void);
 void display_alphanum(unsigned char pos, char c, bool dot);
+unsigned char display_get_alphanum(char c);
