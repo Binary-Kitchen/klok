@@ -3,6 +3,19 @@
 #include "animation.h"
 #include "display.h"
 
+static void print_scroll(const char *str, unsigned int delay)
+{
+	unsigned char next;
+	while (*str) {
+		next = display_get_alphanum(*str);
+		display_scroll_left(next);
+		while (delay--)
+			/* we need compile time constants... */
+			_delay_ms(1);
+		str++;
+	}
+}
+
 static void circle(unsigned char pos, unsigned char width, unsigned int delay)
 {
 	unsigned int i;
