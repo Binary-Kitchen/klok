@@ -24,7 +24,7 @@
 
 static unsigned char display[SEGMENTS];
 
-static const unsigned char numbers[] = {
+static const unsigned char numbers[] PROGMEM = {
 	238,
 	40,
 	205,
@@ -97,7 +97,7 @@ void display_num(unsigned char pos, unsigned char num)
 	if (num > 9)
 		return;
 
-	display[pos] = numbers[num];
+	display[pos] = pgm_read_byte(&numbers[num]);
 }
 
 void display_dot(unsigned char pos, bool set)
