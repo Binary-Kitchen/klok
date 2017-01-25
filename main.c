@@ -104,5 +104,6 @@ int main(void){
 		_delay_ms(5000);
 	}
 #endif
+	panic();
 	for (;;);
 }
