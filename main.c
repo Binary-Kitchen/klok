@@ -15,52 +15,34 @@
 #include "rtc.h"
 #include "current.h"
 
-static int print_time(void)
+static void print_time(struct time *time)
 {
-	int ret;
-	struct time time;
+	display_num(1, time->second / 10);
+	display_num(0, time->second % 10);
 
-	ret = rtc_get_time(&time);
-	if (ret)
-		return ret;
+	display_num(3, time->minute / 10);
+	display_num(2, time->minute % 10);
 
-	display_num(1, time.second / 10);
-	display_num(0, time.second % 10);
-
-	display_num(3, time.minute / 10);
-	display_num(2, time.minute % 10);
-
-	display_num(5, time.hour / 10);
-	display_num(4, time.hour % 10);
+	display_num(5, time->hour / 10);
+	display_num(4, time->hour % 10);
 
 	display_dot(4, true);
 	display_dot(2, true);
-
-	return 0;
 }
 
-static int print_date(void)
+static void print_date(struct date *date)
 {
-	int ret;
-	struct date date;
+	display_num(1, (date->year / 10) % 10);
+	display_num(0, date->year % 10);
 
-	ret = rtc_get_date(&date);
-	if (ret)
-		return ret;
+	display_num(3, date->month / 10);
+	display_num(2, date->month % 10);
 
-	display_num(1, (date.year / 10) % 10);
-	display_num(0, date.year % 10);
-
-	display_num(3, date.month / 10);
-	display_num(2, date.month % 10);
-
-	display_num(5, date.day / 10);
-	display_num(4, date.day % 10);
+	display_num(5, date->day / 10);
+	display_num(4, date->day % 10);
 
 	display_dot(4, true);
 	display_dot(2, true);
-
-	return 0;
 }
 
 static void panic(void)
@@ -120,6 +102,7 @@ int main(void){
 	int ret;
 	unsigned int ctr;
 	struct time time;
+	struct date date;
 	bool shown = false;
 
 	MCUCSR |= (1<<JTD);
@@ -141,9 +124,10 @@ int main(void){
 
 	for (;;) {
 		for (ctr = 0; ctr < 50; ctr++) {
-			ret = print_time();
+			ret = rtc_get_time(&time);
 			if (ret)
 				display_panic();
+			print_time(&time);
 			_delay_ms(100);
 		}
 
@@ -158,9 +142,10 @@ int main(void){
 			}
 		}
 
-		ret = print_date();
+		ret = rtc_get_date(&date);
 		if (ret)
 			display_panic();
+		print_date(&date);
 		_delay_ms(5000);
 	}
 #endif
