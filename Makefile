@@ -15,7 +15,7 @@ MCU ?= atmega16
 F_OSC ?= 16000000
 UART_BAUD ?= 115200
 
-OBJS = main.o display.o twimaster.o ds1307.o
+OBJS = main.o display.o twimaster.o ds1307.o animation.o
 
 CC = avr-gcc
 OBJCOPY = avr-objcopy
