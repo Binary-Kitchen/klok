@@ -25,19 +25,6 @@
 
 static unsigned char display[SEGMENTS];
 
-static const unsigned char numbers[] PROGMEM = {
-	238,
-	40,
-	205,
-	109,
-	43,
-	103,
-	231,
-	44,
-	239,
-	111,
-};
-
 static const unsigned char panic[SEGMENTS] PROGMEM = {
 	0,
 	BOTTOM_LEFT | TOP_LEFT | TOP | BOTTOM,
@@ -47,33 +34,74 @@ static const unsigned char panic[SEGMENTS] PROGMEM = {
 	BOTTOM_LEFT | TOP_LEFT | TOP | TOP_RIGHT | MID,
 };
 
-static const unsigned char alphabet[26] PROGMEM = {
-	BOTTOM_LEFT | TOP_LEFT | TOP | TOP_RIGHT | BOTTOM_RIGHT | MID, /* a */
-	ALL, /* b */
-	BOTTOM | BOTTOM_LEFT | TOP_LEFT | TOP, /* c */
-	238, /* d */
-	BOTTOM | MID | TOP | BOTTOM_LEFT | TOP_LEFT, /* e */
-	MID | TOP | BOTTOM_LEFT | TOP_LEFT, /* f */
-	BOTTOM | MID | BOTTOM_RIGHT | BOTTOM_LEFT | TOP_LEFT, /* g */
-	MID | BOTTOM_RIGHT | BOTTOM_LEFT | TOP_LEFT | TOP_RIGHT, /* h */
-	BOTTOM_LEFT | TOP_LEFT, /* i */
-	BOTTOM_RIGHT | TOP_RIGHT, /* j */
-	TOP_LEFT | MID | BOTTOM_RIGHT, /* k */
-	TOP_LEFT | BOTTOM_LEFT | BOTTOM, /* l */
-	BOTTOM_LEFT | TOP_LEFT | TOP | TOP_RIGHT | BOTTOM_RIGHT, /* m */
-	BOTTOM_LEFT | TOP_LEFT | TOP | TOP_RIGHT | BOTTOM_RIGHT, /* n */
-	238, /* o */
-	BOTTOM_LEFT | TOP_LEFT | TOP | TOP_RIGHT | MID, /* p */
-	BOTTOM_RIGHT | TOP_LEFT | TOP | TOP_RIGHT | BOTTOM_RIGHT | MID, /* q */
-	BOTTOM_LEFT | BOTTOM_RIGHT | TOP_LEFT | TOP | TOP_RIGHT | BOTTOM_RIGHT | MID, /* r */
-	TOP | TOP_LEFT | MID | BOTTOM_RIGHT | BOTTOM, /* s */
-	BOTTOM_LEFT | TOP_LEFT | TOP, /* t */
-	BOTTOM_LEFT | TOP_LEFT | BOTTOM | BOTTOM_RIGHT | TOP_RIGHT, /* u */
-	BOTTOM_LEFT | TOP_LEFT | BOTTOM | BOTTOM_RIGHT | TOP_RIGHT, /* v */
-	BOTTOM_LEFT | TOP_LEFT | BOTTOM | BOTTOM_RIGHT | TOP_RIGHT, /* v */
-	MID | BOTTOM_RIGHT | BOTTOM_LEFT | TOP_LEFT | TOP_RIGHT, /* x */
-	MID | BOTTOM_RIGHT | TOP_LEFT | TOP_RIGHT, /* y */
-	205, /* 2 */
+static const unsigned char ascii[128] PROGMEM = {
+	['0'] =
+		238,
+		40,
+		205,
+		109,
+		43,
+		103,
+		231,
+		44,
+		239,
+		111,
+
+	['a'] =
+		BOTTOM_LEFT | TOP_LEFT | TOP | TOP_RIGHT | BOTTOM_RIGHT | MID, /* a */
+		ALL, /* b */
+		BOTTOM | BOTTOM_LEFT | TOP_LEFT | TOP, /* c */
+		238, /* d */
+		BOTTOM | MID | TOP | BOTTOM_LEFT | TOP_LEFT, /* e */
+		MID | TOP | BOTTOM_LEFT | TOP_LEFT, /* f */
+		BOTTOM | MID | BOTTOM_RIGHT | BOTTOM_LEFT | TOP_LEFT, /* g */
+		MID | BOTTOM_RIGHT | BOTTOM_LEFT | TOP_LEFT | TOP_RIGHT, /* h */
+		BOTTOM_LEFT | TOP_LEFT, /* i */
+		BOTTOM_RIGHT | TOP_RIGHT, /* j */
+		TOP_LEFT | MID | BOTTOM_RIGHT, /* k */
+		TOP_LEFT | BOTTOM_LEFT | BOTTOM, /* l */
+		BOTTOM_LEFT | TOP_LEFT | TOP | TOP_RIGHT | BOTTOM_RIGHT, /* m */
+		BOTTOM_LEFT | TOP_LEFT | TOP | TOP_RIGHT | BOTTOM_RIGHT, /* n */
+		238, /* o */
+		BOTTOM_LEFT | TOP_LEFT | TOP | TOP_RIGHT | MID, /* p */
+		BOTTOM_RIGHT | TOP_LEFT | TOP | TOP_RIGHT | BOTTOM_RIGHT | MID, /* q */
+		BOTTOM_LEFT | BOTTOM_RIGHT | TOP_LEFT | TOP | TOP_RIGHT | BOTTOM_RIGHT | MID, /* r */
+		TOP | TOP_LEFT | MID | BOTTOM_RIGHT | BOTTOM, /* s */
+		BOTTOM_LEFT | TOP_LEFT | TOP, /* t */
+		BOTTOM_LEFT | TOP_LEFT | BOTTOM | BOTTOM_RIGHT | TOP_RIGHT, /* u */
+		BOTTOM_LEFT | TOP_LEFT | BOTTOM | BOTTOM_RIGHT | TOP_RIGHT, /* v */
+		BOTTOM_LEFT | TOP_LEFT | BOTTOM | BOTTOM_RIGHT | TOP_RIGHT, /* v */
+		MID | BOTTOM_RIGHT | BOTTOM_LEFT | TOP_LEFT | TOP_RIGHT, /* x */
+		MID | BOTTOM_RIGHT | TOP_LEFT | TOP_RIGHT, /* y */
+		205, /* 2 */
+
+	['A'] =
+		BOTTOM_LEFT | TOP_LEFT | TOP | TOP_RIGHT | BOTTOM_RIGHT | MID, /* a */
+		ALL, /* b */
+		BOTTOM | BOTTOM_LEFT | TOP_LEFT | TOP, /* c */
+		238, /* d */
+		BOTTOM | MID | TOP | BOTTOM_LEFT | TOP_LEFT, /* e */
+		MID | TOP | BOTTOM_LEFT | TOP_LEFT, /* f */
+		BOTTOM | MID | BOTTOM_RIGHT | BOTTOM_LEFT | TOP_LEFT, /* g */
+		MID | BOTTOM_RIGHT | BOTTOM_LEFT | TOP_LEFT | TOP_RIGHT, /* h */
+		BOTTOM_LEFT | TOP_LEFT, /* i */
+		BOTTOM_RIGHT | TOP_RIGHT, /* j */
+		TOP_LEFT | MID | BOTTOM_RIGHT, /* k */
+		TOP_LEFT | BOTTOM_LEFT | BOTTOM, /* l */
+		BOTTOM_LEFT | TOP_LEFT | TOP | TOP_RIGHT | BOTTOM_RIGHT, /* m */
+		BOTTOM_LEFT | TOP_LEFT | TOP | TOP_RIGHT | BOTTOM_RIGHT, /* n */
+		238, /* o */
+		BOTTOM_LEFT | TOP_LEFT | TOP | TOP_RIGHT | MID, /* p */
+		BOTTOM_RIGHT | TOP_LEFT | TOP | TOP_RIGHT | BOTTOM_RIGHT | MID, /* q */
+		BOTTOM_LEFT | BOTTOM_RIGHT | TOP_LEFT | TOP | TOP_RIGHT | BOTTOM_RIGHT | MID, /* r */
+		TOP | TOP_LEFT | MID | BOTTOM_RIGHT | BOTTOM, /* s */
+		BOTTOM_LEFT | TOP_LEFT | TOP, /* t */
+		BOTTOM_LEFT | TOP_LEFT | BOTTOM | BOTTOM_RIGHT | TOP_RIGHT, /* u */
+		BOTTOM_LEFT | TOP_LEFT | BOTTOM | BOTTOM_RIGHT | TOP_RIGHT, /* v */
+		BOTTOM_LEFT | TOP_LEFT | BOTTOM | BOTTOM_RIGHT | TOP_RIGHT, /* v */
+		MID | BOTTOM_RIGHT | BOTTOM_LEFT | TOP_LEFT | TOP_RIGHT, /* x */
+		MID | BOTTOM_RIGHT | TOP_LEFT | TOP_RIGHT, /* y */
+		205, /* 2 */
 };
 
 static inline void nops(void) {
@@ -127,7 +155,7 @@ void display_num(unsigned char pos, unsigned char num)
 	if (num > 9)
 		return;
 
-	display[pos] = pgm_read_byte(&numbers[num]);
+	display[pos] = pgm_read_byte(ascii + '0' + num);
 }
 
 void display_dot(unsigned char pos, bool set)
@@ -179,11 +207,9 @@ void display_or_character(unsigned char pos, unsigned char mask)
 }
 
 unsigned char display_get_alphanum(char c)
-{	if (isdigit(c))
-		return pgm_read_byte(&numbers[c - '0']);
-	else if (isalpha(c))
-		return pgm_read_byte(&alphabet[tolower(c) - 'a']);
-
+{
+	if (c > 0)
+		return pgm_read_byte(ascii + c);
 	return 0;
 }
 
